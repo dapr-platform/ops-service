@@ -1,0 +1,695 @@
+basePath: /swagger/ops-service
+definitions:
+  common.MetricPanel:
+    properties:
+      col:
+        type: integer
+      query:
+        type: string
+      row:
+        type: integer
+      title:
+        type: string
+      type:
+        description: trend,bar,current,stack,etc..
+        type: string
+    type: object
+  common.Response:
+    properties:
+      data: {}
+      msg:
+        type: string
+      status:
+        type: integer
+    type: object
+  entity.BatchQueryForm:
+    properties:
+      queries:
+        items:
+          $ref: '#/definitions/entity.QueryFormItem'
+        type: array
+    required:
+    - queries
+    type: object
+  entity.MonitorGatewayDetail:
+    properties:
+      identifier:
+        type: string
+      name:
+        type: string
+      points:
+        items:
+          $ref: '#/definitions/entity.MonitorGatewayDetailPoint'
+        type: array
+      status:
+        type: integer
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
+  entity.MonitorGatewayDetailPoint:
+    properties:
+      access_type:
+        description: 接入类型 ， IO/485
+        type: string
+      address_485:
+        description: 如果是485，则是地址
+        type: string
+      address_io:
+        description: 如果是io，则是AI1,DI1
+        type: string
+      device_identifier:
+        type: string
+      name:
+        type: string
+      status:
+        description: 状态，1：正常，0：异常
+        type: integer
+      update_time:
+        description: 格式 2006-01-02 15:04:05
+        type: string
+      value:
+        description: 值
+        type: string
+    type: object
+  entity.MonitorListDbItem:
+    properties:
+      cache_hit_rate:
+        description: 缓存命中率
+        type: number
+      conflict_count:
+        description: 冲突数
+        type: integer
+      connection_count:
+        description: 连接数
+        type: integer
+      deadlock_count:
+        description: 死锁数
+        type: integer
+      name:
+        description: 名称
+        type: string
+      server:
+        description: 服务器
+        type: string
+      status:
+        description: 运行状态，1：正常，0：停止
+        type: integer
+    type: object
+  entity.MonitorListGatewayItem:
+    properties:
+      ai_port_count:
+        description: ai端口数
+        type: integer
+      ao_port_count:
+        description: ao端口数
+        type: integer
+      di_port_count:
+        description: di端口数
+        type: integer
+      do_port_count:
+        description: do端口数
+        type: integer
+      identifier:
+        description: 标识符
+        type: string
+      name:
+        description: 名称
+        type: string
+      status:
+        description: 运行状态，1：正常，0：停止
+        type: integer
+    type: object
+  entity.MonitorListHostItem:
+    properties:
+      cpu_usage:
+        description: cpu使用率
+        type: number
+      ip:
+        description: ip
+        type: string
+      kernel:
+        type: string
+      mem_usage:
+        description: 内存使用率
+        type: number
+      name:
+        description: 名称
+        type: string
+      os:
+        type: string
+      status:
+        description: 状态,1:正常,0:离线
+        type: integer
+    type: object
+  entity.MonitorListInterfaceItem:
+    properties:
+      alert_count:
+        description: 告警次数
+        type: integer
+      call_frequency:
+        description: 调用频率
+        type: integer
+      latest_data_time:
+        type: string
+      name:
+        description: 名称
+        type: string
+      protocol:
+        description: 接口协议
+        type: string
+      status:
+        description: 状态，1：正常，0：异常
+        type: integer
+      third_party_system:
+        description: 第三方系统
+        type: string
+    type: object
+  entity.MonitorListServiceItem:
+    properties:
+      host:
+        description: 主机
+        type: string
+      memory_usage:
+        description: 占用内存数
+        type: integer
+      name:
+        description: 名称
+        type: string
+      status:
+        description: 运行状态，1：正常，0：停止
+        type: integer
+      thread_count:
+        description: 线程数
+        type: integer
+    type: object
+  entity.MonitorLog:
+    properties:
+      count:
+        type: string
+      level:
+        type: string
+    type: object
+  entity.MonitorTotal:
+    properties:
+      total:
+        items:
+          $ref: '#/definitions/entity.MonitorTotalItem'
+        type: array
+    type: object
+  entity.MonitorTotalItem:
+    properties:
+      error:
+        description: 异常数
+        type: integer
+      name:
+        description: 名称
+        type: string
+      normal:
+        description: 正常数
+        type: integer
+      total:
+        description: 总数
+        type: integer
+    type: object
+  entity.QueryFormItem:
+    properties:
+      end:
+        description: 格式 2006-01-02 15:04:05
+        type: string
+      query:
+        type: string
+      start:
+        description: 格式 2006-01-02 15:04:05
+        type: string
+      step:
+        description: 单位秒
+        type: integer
+    required:
+    - end
+    - query
+    - start
+    - step
+    type: object
+  entity.QueryMetrics:
+    properties:
+      query:
+        type: string
+      time:
+        type: string
+    type: object
+  entity.QueryRangeMetrics:
+    properties:
+      end:
+        description: 格式 2006-01-02 15:04:05
+        type: string
+      query:
+        type: string
+      start:
+        description: The boundaries of the time range.
+        type: string
+      step:
+        description: The maximum time between two slices within the boundaries.
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: ops-service API
+  title: ops-service API
+  version: "1.0"
+paths:
+  /db-excel-upload:
+    post:
+      description: 上传数据库格式静态文件，注意sheet名称和表名称必须一致,columns必须与数据库字段一致,数据表要有个字符串字段id，计算规则为column前加*字段的md5
+      parameters:
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: key
+        in: formData
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200,"data":{},"msg":"success"}'
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 上传数据库格式静态文件
+      tags:
+      - Ops
+  /metrics/query:
+    post:
+      consumes:
+      - application/json
+      description: 测试查询
+      parameters:
+      - description: 查询条件
+        in: body
+        name: query
+        required: true
+        schema:
+          $ref: '#/definitions/entity.QueryMetrics'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 测试查询
+      tags:
+      - Metrics
+  /metrics/query-range:
+    post:
+      consumes:
+      - application/json
+      description: range查询
+      parameters:
+      - description: 查询条件
+        in: body
+        name: query
+        required: true
+        schema:
+          $ref: '#/definitions/entity.QueryRangeMetrics'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: range查询
+      tags:
+      - Metrics
+  /metrics/query-range-batch:
+    post:
+      consumes:
+      - application/json
+      description: 查询batch
+      parameters:
+      - description: 查询条件
+        in: body
+        name: query
+        required: true
+        schema:
+          $ref: '#/definitions/entity.BatchQueryForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 查询batch
+      tags:
+      - Metrics
+  /monitor/gateway/detail:
+    get:
+      consumes:
+      - application/json
+      description: 监控接口-gateway-detail
+      parameters:
+      - description: identifier
+        in: query
+        name: identifier
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.MonitorGatewayDetail'
+              type: object
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 监控接口-gateway-detail
+      tags:
+      - Monitor
+  /monitor/list/dbs:
+    get:
+      consumes:
+      - application/json
+      description: 监控数据库列表
+      parameters:
+      - description: 过滤名称, 不填则为全部
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entity.MonitorListDbItem'
+                  type: array
+              type: object
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 监控数据库列表
+      tags:
+      - Monitor
+  /monitor/list/gateways:
+    get:
+      consumes:
+      - application/json
+      description: 监控采集网关列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entity.MonitorListGatewayItem'
+                  type: array
+              type: object
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 监控采集网关列表
+      tags:
+      - Monitor
+  /monitor/list/hosts:
+    get:
+      consumes:
+      - application/json
+      description: 监控主机列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entity.MonitorListHostItem'
+                  type: array
+              type: object
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 监控主机列表
+      tags:
+      - Monitor
+  /monitor/list/interfaces:
+    get:
+      consumes:
+      - application/json
+      description: 监控接口列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entity.MonitorListInterfaceItem'
+                  type: array
+              type: object
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 监控接口列表
+      tags:
+      - Monitor
+  /monitor/list/services:
+    get:
+      consumes:
+      - application/json
+      description: 监控服务列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entity.MonitorListServiceItem'
+                  type: array
+              type: object
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 监控服务列表
+      tags:
+      - Monitor
+  /monitor/log:
+    get:
+      consumes:
+      - application/json
+      description: 监控接口-log
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.MonitorLog'
+              type: object
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 监控接口-log
+      tags:
+      - Monitor
+  /monitor/log/detail:
+    get:
+      consumes:
+      - application/json
+      description: 监控接口-log-detail
+      parameters:
+      - description: 名称
+        in: query
+        name: name
+        type: string
+      - description: 级别， debug,info,error,warn,不填则为全部
+        in: query
+        name: level
+        type: string
+      - description: 过滤,可使用正则表达式
+        in: query
+        name: filter
+        type: string
+      - description: 限制条数，默认100
+        in: query
+        name: limit
+        type: integer
+      - description: 多少小时前，默认24
+        in: query
+        name: pre_hours
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.MonitorLog'
+              type: object
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 监控接口-log-detail
+      tags:
+      - Monitor
+  /monitor/log/label/values:
+    get:
+      consumes:
+      - application/json
+      description: 监控接口-label values
+      parameters:
+      - description: label
+        in: query
+        name: label
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 监控接口-log-label values
+      tags:
+      - Monitor
+  /monitor/service/metrics_panel:
+    get:
+      consumes:
+      - application/json
+      description: 监控接口-获取服务监控指标集
+      parameters:
+      - description: host
+        in: query
+        name: host
+        required: true
+        type: string
+      - description: name
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/common.MetricPanel'
+                  type: array
+              type: object
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 监控接口-service-metrics
+      tags:
+      - Monitor
+  /monitor/total:
+    get:
+      consumes:
+      - application/json
+      description: 监控总览
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功code和成功信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.MonitorTotal'
+              type: object
+        "500":
+          description: 错误code和错误信息
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 监控总览
+      tags:
+      - Monitor
+swagger: "2.0"
