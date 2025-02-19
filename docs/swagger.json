@@ -170,56 +170,6 @@
                 }
             }
         },
-        "/monitor/gateway/detail": {
-            "get": {
-                "description": "监控接口-gateway-detail",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Monitor"
-                ],
-                "summary": "监控接口-gateway-detail",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "identifier",
-                        "name": "identifier",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功code和成功信息",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/entity.MonitorGatewayDetail"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "错误code和错误信息",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/monitor/list/dbs": {
             "get": {
                 "description": "监控数据库列表",
@@ -256,50 +206,6 @@
                                             "type": "array",
                                             "items": {
                                                 "$ref": "#/definitions/entity.MonitorListDbItem"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "错误code和错误信息",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/monitor/list/gateways": {
-            "get": {
-                "description": "监控采集网关列表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Monitor"
-                ],
-                "summary": "监控采集网关列表",
-                "responses": {
-                    "200": {
-                        "description": "成功code和成功信息",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/entity.MonitorListGatewayItem"
                                             }
                                         }
                                     }
@@ -765,67 +671,6 @@
                 }
             }
         },
-        "entity.MonitorGatewayDetail": {
-            "type": "object",
-            "properties": {
-                "identifier": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "points": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/entity.MonitorGatewayDetailPoint"
-                    }
-                },
-                "status": {
-                    "type": "integer"
-                },
-                "tags": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "entity.MonitorGatewayDetailPoint": {
-            "type": "object",
-            "properties": {
-                "access_type": {
-                    "description": "接入类型 ， IO/485",
-                    "type": "string"
-                },
-                "address_485": {
-                    "description": "如果是485，则是地址",
-                    "type": "string"
-                },
-                "address_io": {
-                    "description": "如果是io，则是AI1,DI1",
-                    "type": "string"
-                },
-                "device_identifier": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "status": {
-                    "description": "状态，1：正常，0：异常",
-                    "type": "integer"
-                },
-                "update_time": {
-                    "description": "格式 2006-01-02 15:04:05",
-                    "type": "string"
-                },
-                "value": {
-                    "description": "值",
-                    "type": "string"
-                }
-            }
-        },
         "entity.MonitorListDbItem": {
             "type": "object",
             "properties": {
@@ -851,39 +696,6 @@
                 },
                 "server": {
                     "description": "服务器",
-                    "type": "string"
-                },
-                "status": {
-                    "description": "运行状态，1：正常，0：停止",
-                    "type": "integer"
-                }
-            }
-        },
-        "entity.MonitorListGatewayItem": {
-            "type": "object",
-            "properties": {
-                "ai_port_count": {
-                    "description": "ai端口数",
-                    "type": "integer"
-                },
-                "ao_port_count": {
-                    "description": "ao端口数",
-                    "type": "integer"
-                },
-                "di_port_count": {
-                    "description": "di端口数",
-                    "type": "integer"
-                },
-                "do_port_count": {
-                    "description": "do端口数",
-                    "type": "integer"
-                },
-                "identifier": {
-                    "description": "标识符",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "名称",
                     "type": "string"
                 },
                 "status": {

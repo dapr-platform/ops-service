@@ -18,12 +18,10 @@ func InitMonitorHandler(r chi.Router) {
 	r.Get(common.BASE_CONTEXT+"/monitor/list/hosts", MonitorListHostHandler)
 	r.Get(common.BASE_CONTEXT+"/monitor/list/dbs", MonitorListDbHandler)
 	r.Get(common.BASE_CONTEXT+"/monitor/list/services", MonitorListServiceHandler)
-	r.Get(common.BASE_CONTEXT+"/monitor/list/gateways", MonitorListGatewayHandler)
 	r.Get(common.BASE_CONTEXT+"/monitor/list/interfaces", MonitorListInterfaceHandler)
 	r.Get(common.BASE_CONTEXT+"/monitor/log", MonitorLogHandler)
 	r.Get(common.BASE_CONTEXT+"/monitor/log/detail", MonitorLogDetailHandler)
 	r.Get(common.BASE_CONTEXT+"/monitor/log/label/values", MonitorLogLabelValuesHandler)
-	r.Get(common.BASE_CONTEXT+"/monitor/gateway/detail", MonitorGatewayDetailHandler)
 	r.Get(common.BASE_CONTEXT+"/monitor/service/metrics_panel", MonitorServiceMetricsHandler)
 }
 
@@ -96,20 +94,6 @@ func MonitorListDbHandler(w http.ResponseWriter, r *http.Request) {
 // @Router /monitor/list/services [get]
 func MonitorListServiceHandler(w http.ResponseWriter, r *http.Request) {
 	data := monitor.GetMonitorListService()
-
-	common.HttpResult(w, common.OK.WithData(data))
-}
-
-// @Summary 监控采集网关列表
-// @Description 监控采集网关列表
-// @Tags Monitor
-// @Accept  json
-// @Produce  json
-// @Success 200 {object} common.Response{data=[]entity.MonitorListGatewayItem} "成功code和成功信息"
-// @Failure 500 {object} common.Response "错误code和错误信息"
-// @Router /monitor/list/gateways [get]
-func MonitorListGatewayHandler(w http.ResponseWriter, r *http.Request) {
-	data := monitor.GetMonitorListGateway()
 
 	common.HttpResult(w, common.OK.WithData(data))
 }
@@ -211,30 +195,6 @@ func MonitorLogLabelValuesHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	data, err := monitor.GetLokiLabelVales(r.Context(), label)
-	if err != nil {
-		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
-		return
-	}
-
-	common.HttpResult(w, common.OK.WithData(data))
-}
-
-// @Summary 监控接口-gateway-detail
-// @Description 监控接口-gateway-detail
-// @Tags Monitor
-// @Accept json
-// @Produce json
-// @Param identifier query string true "identifier"
-// @Success 200 {object} common.Response{data=entity.MonitorGatewayDetail} "成功code和成功信息"
-// @Failure 500 {object} common.Response "错误code和错误信息"
-// @Router /monitor/gateway/detail [get]
-func MonitorGatewayDetailHandler(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("identifier")
-	if id == "" {
-		common.HttpResult(w, common.ErrService.AppendMsg("identifier is blank"))
-		return
-	}
-	data, err := monitor.GetMonitorGatewayDetail(r.Context(), id)
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
