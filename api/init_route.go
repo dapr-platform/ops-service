@@ -6,4 +6,5 @@ func InitRoute(r chi.Router) {
 	InitMonitorHandler(r)
 	initDbExcelRouter(r)
 	InitMetricsQueryHandler(r)
+	InitOps_dictRoute(r)
 }
