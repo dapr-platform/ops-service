@@ -690,8 +690,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "dict_code",
-                        "name": "dict_code",
+                        "description": "dict_type_name",
+                        "name": "dict_type_name",
                         "in": "query"
                     },
                     {
@@ -956,8 +956,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "dict_code",
-                        "name": "dict_code",
+                        "description": "dict_type_name",
+                        "name": "dict_type_name",
                         "in": "query"
                     },
                     {
@@ -1371,16 +1371,16 @@ const docTemplate = `{
                     "description": "created_time",
                     "type": "string"
                 },
-                "dict_code": {
-                    "description": "字典编码",
-                    "type": "string"
-                },
                 "dict_name": {
                     "description": "字典名称",
                     "type": "string"
                 },
                 "dict_type": {
                     "description": "字典类型",
+                    "type": "string"
+                },
+                "dict_type_name": {
+                    "description": "字典类型名称",
                     "type": "string"
                 },
                 "dict_value": {

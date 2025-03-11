@@ -24,7 +24,7 @@ Table: o_ops_dict
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 5] dict_type                                      VARCHAR(100)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 100     default: []
-[ 6] dict_code                                      VARCHAR(100)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 100     default: []
+[ 6] dict_type_name                                 VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 7] dict_name                                      VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 8] dict_value                                     VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 9] sort_order                                     INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [0]
@@ -33,7 +33,7 @@ Table: o_ops_dict
 
 JSON Sample
 -------------------------------------
-{    "id": "mmmhYKlmvYxuihvJFvGHLeNIt",    "created_by": "dTvdpSfIoDdZYdoXSmvfgZkwn",    "created_time": 73,    "updated_by": "OIAvkBZOsZHIwAKYjSAthjBpC",    "updated_time": 78,    "dict_type": "utJBWWIDbtfsRNEiiVMDagKen",    "dict_code": "kFqOOvtIRMMCJYybxhjvecNGE",    "dict_name": "ZjqKyWpxLoDIfqxMTVELgmyjk",    "dict_value": "fdNHXsPOoLJdsPtGdfVODlBAc",    "sort_order": 81,    "remarks": "SdyONVUwsoCvSGhYbgAvRHcRP"}
+{    "id": "HZZibDWmwIukietROJRcwCBWU",    "created_by": "RLAQBFMMemxFuQYlesrvfwVpD",    "created_time": 51,    "updated_by": "vJEZPNajvWJXlcCkwPDZtUNCV",    "updated_time": 19,    "dict_type": "ZaQNStVDmdEiwEQqUwSwBvhBS",    "dict_type_name": "obBaQVoHCxokJHvYTENBUPnuI",    "dict_name": "ONpOdkujujaXNxyGhMKaksKjb",    "dict_value": "IZHChnEYIqXEmfxSHOsPIOpnd",    "sort_order": 47,    "remarks": "sfttMGGHUjiVrNcwYTgJbRBvT"}
 
 
 
@@ -52,7 +52,7 @@ var (
 
 	Ops_dict_FIELD_NAME_dict_type = "dict_type"
 
-	Ops_dict_FIELD_NAME_dict_code = "dict_code"
+	Ops_dict_FIELD_NAME_dict_type_name = "dict_type_name"
 
 	Ops_dict_FIELD_NAME_dict_name = "dict_name"
 
@@ -77,7 +77,7 @@ type Ops_dict struct {
 
 	DictType string `json:"dict_type"` //字典类型
 
-	DictCode string `json:"dict_code"` //字典编码
+	DictTypeName string `json:"dict_type_name"` //字典类型名称
 
 	DictName string `json:"dict_name"` //字典名称
 
@@ -221,21 +221,21 @@ var Ops_dictTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              6,
-			Name:               "dict_code",
-			Comment:            `字典编码`,
+			Name:               "dict_type_name",
+			Comment:            `字典类型名称`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(100)",
+			DatabaseTypePretty: "VARCHAR(255)",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
-			ColumnLength:       100,
-			GoFieldName:        "DictCode",
+			ColumnLength:       255,
+			GoFieldName:        "DictTypeName",
 			GoFieldType:        "string",
-			JSONFieldName:      "dict_code",
-			ProtobufFieldName:  "dict_code",
+			JSONFieldName:      "dict_type_name",
+			ProtobufFieldName:  "dict_type_name",
 			ProtobufType:       "string",
 			ProtobufPos:        7,
 		},

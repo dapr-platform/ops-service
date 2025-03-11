@@ -10,7 +10,7 @@ CREATE TABLE o_ops_dict (
     updated_by VARCHAR(32) NOT NULL,
     updated_time TIMESTAMP NOT NULL,
     dict_type VARCHAR(100) NOT NULL,
-    dict_code VARCHAR(100) NOT NULL,
+    dict_type_name VARCHAR(255) NOT NULL,
     dict_name VARCHAR(255) NOT NULL,
     dict_value VARCHAR(255) NOT NULL,
     sort_order INTEGER NOT NULL DEFAULT 0,
@@ -20,7 +20,7 @@ CREATE TABLE o_ops_dict (
 
 COMMENT ON TABLE o_ops_dict IS '字典表';
 COMMENT ON COLUMN o_ops_dict.dict_type IS '字典类型';
-COMMENT ON COLUMN o_ops_dict.dict_code IS '字典编码';
+COMMENT ON COLUMN o_ops_dict.dict_type_name IS '字典类型名称';
 COMMENT ON COLUMN o_ops_dict.dict_name IS '字典名称';
 COMMENT ON COLUMN o_ops_dict.dict_value IS '字典值';
 COMMENT ON COLUMN o_ops_dict.sort_order IS '排序号';
