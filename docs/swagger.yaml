@@ -14,6 +14,16 @@ definitions:
         description: trend,bar,current,stack,etc..
         type: string
     type: object
+  common.Page:
+    properties:
+      items: {}
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
   common.Response:
     properties:
       data: {}
@@ -186,6 +196,42 @@ definitions:
       step:
         description: The maximum time between two slices within the boundaries.
         type: integer
+    type: object
+  model.Ops_dict:
+    properties:
+      created_by:
+        description: created_by
+        type: string
+      created_time:
+        description: created_time
+        type: string
+      dict_code:
+        description: 字典编码
+        type: string
+      dict_name:
+        description: 字典名称
+        type: string
+      dict_type:
+        description: 字典类型
+        type: string
+      dict_value:
+        description: 字典值
+        type: string
+      id:
+        description: id
+        type: string
+      remarks:
+        description: 备注
+        type: string
+      sort_order:
+        description: 排序号
+        type: integer
+      updated_by:
+        description: updated_by
+        type: string
+      updated_time:
+        description: updated_time
+        type: string
     type: object
 info:
   contact: {}
@@ -570,4 +616,285 @@ paths:
       summary: 监控总览
       tags:
       - Monitor
+  /ops-dict:
+    get:
+      description: query objects
+      parameters:
+      - description: _select
+        in: query
+        name: _select
+        type: string
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: created_by
+        in: query
+        name: created_by
+        type: string
+      - description: created_time
+        in: query
+        name: created_time
+        type: string
+      - description: updated_by
+        in: query
+        name: updated_by
+        type: string
+      - description: updated_time
+        in: query
+        name: updated_time
+        type: string
+      - description: dict_type
+        in: query
+        name: dict_type
+        type: string
+      - description: dict_code
+        in: query
+        name: dict_code
+        type: string
+      - description: dict_name
+        in: query
+        name: dict_name
+        type: string
+      - description: dict_value
+        in: query
+        name: dict_value
+        type: string
+      - description: sort_order
+        in: query
+        name: sort_order
+        type: string
+      - description: remarks
+        in: query
+        name: remarks
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: objects array
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Ops_dict'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: query objects
+      tags:
+      - 字典
+    post:
+      consumes:
+      - application/json
+      description: save
+      parameters:
+      - description: object
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/model.Ops_dict'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: object
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Ops_dict'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: save
+      tags:
+      - 字典
+  /ops-dict/{id}:
+    delete:
+      description: delete
+      parameters:
+      - description: 实例id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: object
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Ops_dict'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: delete
+      tags:
+      - 字典
+  /ops-dict/batch-delete:
+    post:
+      consumes:
+      - application/json
+      description: batch delete
+      parameters:
+      - description: id array
+        in: body
+        name: ids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: batch delete
+      tags:
+      - 字典
+  /ops-dict/batch-upsert:
+    post:
+      consumes:
+      - application/json
+      description: batch update
+      parameters:
+      - description: objects array
+        in: body
+        name: entities
+        required: true
+        schema:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: batch update
+      tags:
+      - 字典
+  /ops-dict/page:
+    get:
+      description: page query, _page(from 1 begin), _page_size, _order, and others
+        fields, status=1, name=$like.%CAM%
+      parameters:
+      - description: current page
+        in: query
+        name: _page
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        name: _page_size
+        required: true
+        type: integer
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: created_by
+        in: query
+        name: created_by
+        type: string
+      - description: created_time
+        in: query
+        name: created_time
+        type: string
+      - description: updated_by
+        in: query
+        name: updated_by
+        type: string
+      - description: updated_time
+        in: query
+        name: updated_time
+        type: string
+      - description: dict_type
+        in: query
+        name: dict_type
+        type: string
+      - description: dict_code
+        in: query
+        name: dict_code
+        type: string
+      - description: dict_name
+        in: query
+        name: dict_name
+        type: string
+      - description: dict_value
+        in: query
+        name: dict_value
+        type: string
+      - description: sort_order
+        in: query
+        name: sort_order
+        type: string
+      - description: remarks
+        in: query
+        name: remarks
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: objects array
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/common.Page'
+                  - properties:
+                      items:
+                        items:
+                          $ref: '#/definitions/model.Ops_dict'
+                        type: array
+                    type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: page query
+      tags:
+      - 字典
 swagger: "2.0"
